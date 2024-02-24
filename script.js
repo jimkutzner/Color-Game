@@ -30,27 +30,18 @@ let selectedSecretCell
 let random
 let secretCell 
 let hslValue
-
+let rangeLimit
+let centralNumber
+let red
+let green
+let blue
 
 results.classList.add('hide')
 
-function runGame(cells) {
-  cells.forEach(cell => {
-    cell.classList.remove('wrong')
-  })
-  randomizeCells()
-  random = randomSix()
-  //colorFormat.innerText = cells[random].style.backgroundColor
-  displayColorCode(cells, random)
-  // console.log(cells[random].style.backgroundColor, random)
-  // console.log(cells[random].style.backgroundColor)
-  secretCell = cells[random].style.backgroundColor
-  return secretCell, random
-}
 
 runGame(cells)
-console.log('secret cell = ' + secretCell)
-console.log(random)
+// console.log('secret cell = ' + secretCell)
+// console.log(random)
 
 // get Format
 format.addEventListener('click', () => {
@@ -62,23 +53,17 @@ difficulty.addEventListener('click', () => {
   randomizeCells()
   getFormat()
   getDifficulty()
+  runGame(cells)
 })
 // make selection -> click on cell
 for(let i=0; i<cells.length; i++) {
     cells[i].addEventListener('click', () => {      
       const selectedCellId = cells[i].id
       results.classList.remove('hide')
-      console.log(`you picked ${cells[i].id}, correct cell is ${random}`)      
-      
       if(selectedCellId == random) {
-        console.log('yes')
         results.firstElementChild.innerText = "Correct"
-        
-
       } else {
         results.firstElementChild.innerText = "Wrong"
-        console.log('no')      
-  
       }
     dimCells(cells)  
     cells[random].classList.remove('wrong')
@@ -92,6 +77,18 @@ button.addEventListener('click', () => {
 
   results.classList.add('hide')
 })
+
+function runGame(cells) {
+  cells.forEach(cell => {
+    cell.classList.remove('wrong')
+  })
+  randomizeCells()
+  random = randomSix()
+  displayColorCode(cells, random)
+  secretCell = cells[random].style.backgroundColor
+  return secretCell, random
+}
+
 
 function dimCells(cells) {
   cells.forEach(cell => {
@@ -123,9 +120,10 @@ function getDifficulty() {
 
 function randomizeCells() {
   cells.forEach((cell) => {
-    const red = randomRgbValue()
-    const green = randomRgbValue()
-    const blue = randomRgbValue()    
+    setCellColors()
+    // const red = randomRgbValue()
+    // const green = randomRgbValue()
+    // const blue = randomRgbValue()    
     cell.style.backgroundColor = `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`
     cell.colors = {red, green, blue}
   })
@@ -135,18 +133,73 @@ function randomSix() {
   return Math.floor(Math.random() * 6)
 }
 
-function randomRgbValue() {
-  return Math.round(Math.random() * 255)
+// function randomRgbValue() {
+//   return Math.round(Math.random() * 255)
+// }
+
+// function randomHslValue() {
+//   return Math.round(Math.random() * 100)
+// }
+
+function setCellColors() {
+  getDifficulty()
+  let span
+  switch (selectedDifficulty) {
+    case "easy":
+      span = 255
+      break;
+    case "medium":
+      span = 220
+      break;
+    case "hard":
+      span = 190
+      break;
+    case "harder":
+      span = 150
+      break;
+    case "insanelyHard":
+      span = 75
+      break;
+                      
+    default:
+      console.log('default');
+  }
+
+  let startNumber = Math.floor(Math.random() * 255)
+  // console.log(selectedDifficulty + '  selected difficulty')
+  // console.log(startNumber + ' starting number')
+  // console.log(span + '  span')
+  // console.log('   ')
+
+  if(startNumber + (span / 2) >= 255) {
+    centralNumber = 255 - (span / 2)
+    //console.log('hit upper limit')
+  } else if(startNumber - (span / 2) <= 0) {
+    centralNumber = (span / 2)
+    //console.log('hit lower limit')
+  } else {
+    centralNumber = startNumber
+    //console.log('did not hit upper or lower limit')
+  }
+  //console.log(centralNumber + '  central number')
+
+  rangeLimit = Math.floor(Math.random() * span)
+
+  //console.log(rangeLimit + '  range limit')
+  //return centralNumber, rangeLimit
+  
+  red = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
+  green = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
+  blue = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
+
+  return red, green, blue
 }
 
-function randomHslValue() {
-  return Math.round(Math.random() * 100)
-}
+//setCellColors(selectedDifficulty)
+//console.log(red, green, blue, 'rgb')
 
 function displayColorCode(cells, random) {
-  console.log(cells, random)
   getFormat()
-  console.log(selectedFormat + '  selected format')
   const temp1 = cells[random].style.backgroundColor
   const rgb = temp1.match(/(\d+)/g)  
   if(selectedFormat === 'rgb') {
@@ -154,26 +207,11 @@ function displayColorCode(cells, random) {
   } else if(selectedFormat === 'hex') {
     colorFormat.innerText = 
     (`#${Math.abs(rgb[0]).toString(16).padStart(2, '0')}${Math.abs(rgb[1]).toString(16).padStart(2, '0')}${Math.abs(rgb[2]).toString(16).padStart(2, '0')}`)
-  } else {
-    console.log(rgb)    
+  } else {   
     rgbToHSL(rgb)
-
     colorFormat.innerText = hslValue      
   }
 }
-
-//displayColorCode(49,34,109)
-
-// function convertColorFormat(red, green, blue) {
-//   const rgbDisplayedValue = 
-//   (`rgb(${red}, ${green}, ${blue})`)
-//   //console.log(rgbDisplayedValue)
-//   const hexDisplayedValue = 
-//   (`#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')})`)
-//   //console.log(hexDisplayedValue)
-//   const temp2 = rgbToHSL(red, green, blue)
-// }
-
 
 function rgbToHSL(rgb) {
   let r = rgb[0]
@@ -192,12 +230,9 @@ function rgbToHSL(rgb) {
       : 4 + (r - g) / s
     : 0;
   hslValue = `hsl(${Math.round(60 * h < 0 ? 60 * h + 360 : 60 * h)}, ${Math.round(100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0))}%, ${Math.round(100 * (2 * l - s) / 2)}%)`
-//  console.log(hslValue)
+
   return hslValue
 }
-// const temp5 = [49, 134, 10]
-// rgbToHSL(temp5)
-// console.log(hslValue)
 
 
 

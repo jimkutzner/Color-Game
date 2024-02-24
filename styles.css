@@ -56,6 +56,7 @@ body {
 
 .color-grid > .wrong {
   opacity: .3;
+  border: 1px solid grey;
 }
 
 .results {
