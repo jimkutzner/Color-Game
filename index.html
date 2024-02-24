@@ -11,11 +11,11 @@
 <body>
   <header class="header">
     <h2 class="title">Color Game</h2>
-    <h3 class="color-string">rgb(255, 0, 0)</h3>
+    <h3 class="color-string" data-color-format>rgb(255, 0, 0)</h3>
     <form class="form">
       <fieldset>
         <legend>Format</legend>
-        <div class="radio-group">
+        <div class="radio-group" data-format>
           <input type="radio" name="format" id="rgb" value="rgb" checked>
           <label for="rgb">RGB</label>
           <input type="radio" name="format" id="hex" value="hex">
@@ -26,28 +26,32 @@
       </fieldset>
       <fieldset>
         <legend>Difficulty</legend>
-        <div class="radio-group">
+        <div class="radio-group" data-difficulty>
           <input type="radio" name="difficulty" id="easy" value="easy" checked>
           <label for="easy">Easy</label>
           <input type="radio" name="difficulty" id="medium" value="medium">
           <label for="medium">Medium</label>
           <input type="radio" name="difficulty" id="hard" value="hard">
           <label for="hard">Hard</label>
+          <input type="radio" name="difficulty" id="harder" value="harder">
+          <label for="hard">Harder</label>
+          <input type="radio" name="difficulty" id="insanelyHard" value="insanelyHard">
+          <label for="hard">Insanely Hard</label>
         </div>
       </fieldset>
     </form>
   </header>
-  <div class="color-grid">
-    <button class="wrong" disabled style="background-color: blue;"></button>
-    <button disabled style="background-color: red;"></button>
-    <button class="wrong" disabled style="background-color: green;"></button>
-    <button class="wrong" disabled style="background-color: yellow;"></button>
-    <button class="wrong" disabled style="background-color: purple;"></button>
-    <button class="wrong" disabled style="background-color: grey;"></button>
+  <div class="color-grid" data-color-grid>
+    <button class="wrong" id='0'  style="background-color: rgb(0, 0, 255);"></button>
+    <button class="wrong" id='1'  style="background-color: rgb(255, 0, 0);"></button>
+    <button class="wrong" id='2'  style="background-color: rgb(0, 255, 0);"></button>
+    <button class="wrong" id='3'  style="background-color: rgb(255, 255, 0);"></button>
+    <button class="wrong" id='4'  style="background-color: rgb(255, 0, 255);"></button>
+    <button class="wrong" id='5'  style="background-color: rgb(128, 128, 128);"></button>
   </div>
-  <div class="results">
-    <div>Correct</div>
-    <button>Next Color</button>
+  <div class="results" data-results>
+    <div>Guess</div>
+    <button data-button>Next Color</button>
   </div>
 </body>
 </html>
