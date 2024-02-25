@@ -1,61 +1,38 @@
+//import {  } from '/game.js'
 
 //  // WHAT IS THE DISABLED PROPERTY FOR???
-
-// code randomizes the color chips 
-//    and narrows the random choices according to the Difficulty setting
-// code secretly selects one chip as the winner 
-//    and shows the color code per the format setting
-
-// user selects Format and cells reset and results disappear
-// user selects Difficulty and cells reset and results disappear
-
-// user selects color cell
-// results block is revealed with "Correct" or "Wrong"
-// correct chip is un-disabled (revealed); Next Color button is revealed
-
-// user pushes "Next Color" button and cells reset and results disappear
-// color cells are randomized, class 'wrong' is added to all cells, and new color code displayed 
-// color code is changed to correct color
-
 const results = document.querySelector('[data-results]')
 const button = document.querySelector('[data-button]')
 const colorFormat = document.querySelector('[data-color-format]')
 const format = document.querySelector('[data-format]')
 const difficulty = document.querySelector('[data-difficulty]')
 const colorGrid = document.querySelector('[data-color-grid]')
-const cells = [...colorGrid.children]
+export const cells = [...colorGrid.children]
 let selectedFormat
 let selectedDifficulty
-let selectedSecretCell
 let random
 let secretCell 
 let hslValue
-let rangeLimit
-let centralNumber
 let red
 let green
 let blue
 
 results.classList.add('hide')
 
-
 runGame(cells)
-// console.log('secret cell = ' + secretCell)
-// console.log(random)
 
-// get Format
 format.addEventListener('click', () => {
   runGame(cells)
   getFormat()
 })
-// get Difficulty
+
 difficulty.addEventListener('click', () => {
   randomizeCells()
   getFormat()
   getDifficulty()
   runGame(cells)
 })
-// make selection -> click on cell
+
 for(let i=0; i<cells.length; i++) {
     cells[i].addEventListener('click', () => {      
       const selectedCellId = cells[i].id
@@ -70,11 +47,9 @@ for(let i=0; i<cells.length; i++) {
     })
   }
 
-// get next color
-button.addEventListener('click', () => {
- 
-  runGame(cells)
 
+button.addEventListener('click', () => {
+  runGame(cells)
   results.classList.add('hide')
 })
 
@@ -88,7 +63,6 @@ function runGame(cells) {
   secretCell = cells[random].style.backgroundColor
   return secretCell, random
 }
-
 
 function dimCells(cells) {
   cells.forEach(cell => {
@@ -119,27 +93,24 @@ function getDifficulty() {
 }
 
 function randomizeCells() {
+   
+  console.log(red, green, blue, ' here again')
   cells.forEach((cell) => {
-    setCellColors()
-    // const red = randomRgbValue()
-    // const green = randomRgbValue()
-    // const blue = randomRgbValue()    
+    setCellColors()  
     cell.style.backgroundColor = `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`
     cell.colors = {red, green, blue}
   })
 }
 
+function randomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function randomSix() {
   return Math.floor(Math.random() * 6)
 }
-
-// function randomRgbValue() {
-//   return Math.round(Math.random() * 255)
-// }
-
-// function randomHslValue() {
-//   return Math.round(Math.random() * 100)
-// }
 
 function setCellColors() {
   getDifficulty()
@@ -165,38 +136,21 @@ function setCellColors() {
       console.log('default');
   }
 
-  let startNumber = Math.floor(Math.random() * 255)
-  // console.log(selectedDifficulty + '  selected difficulty')
-  // console.log(startNumber + ' starting number')
-  // console.log(span + '  span')
-  // console.log('   ')
-
-  if(startNumber + (span / 2) >= 255) {
-    centralNumber = 255 - (span / 2)
-    //console.log('hit upper limit')
-  } else if(startNumber - (span / 2) <= 0) {
-    centralNumber = (span / 2)
-    //console.log('hit lower limit')
-  } else {
-    centralNumber = startNumber
-    //console.log('did not hit upper or lower limit')
-  }
-  //console.log(centralNumber + '  central number')
-
-  rangeLimit = Math.floor(Math.random() * span)
-
-  //console.log(rangeLimit + '  range limit')
-  //return centralNumber, rangeLimit
-  
-  red = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
-  green = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
-  blue = Math.round((centralNumber - (rangeLimit / 2))+(Math.floor(Math.random() * rangeLimit)))
-
+  const seed = randomNumber(0, 255-span)
+  const offset = Math.round(Math.random() * span)
+  red = Math.abs(seed - Math.round(Math.random() * span))
+  green = Math.abs(seed - Math.round(Math.random() * span))
+  blue = Math.abs(seed - Math.round(Math.random() * span))
+  console.log(red, green, blue, ' rgb')
   return red, green, blue
 }
 
-//setCellColors(selectedDifficulty)
-//console.log(red, green, blue, 'rgb')
+function getCentralNumber(span) {
+  const offset = (255-span)
+  const newSpan = randomNumber(0,span)
+  const centralNumber = newSpan + offset
+  return centralNumber
+}
 
 function displayColorCode(cells, random) {
   getFormat()
@@ -204,6 +158,7 @@ function displayColorCode(cells, random) {
   const rgb = temp1.match(/(\d+)/g)  
   if(selectedFormat === 'rgb') {
     colorFormat.innerText = cells[random].style.backgroundColor
+    console.log(colorFormat.innerText)
   } else if(selectedFormat === 'hex') {
     colorFormat.innerText = 
     (`#${Math.abs(rgb[0]).toString(16).padStart(2, '0')}${Math.abs(rgb[1]).toString(16).padStart(2, '0')}${Math.abs(rgb[2]).toString(16).padStart(2, '0')}`)
@@ -233,9 +188,4 @@ function rgbToHSL(rgb) {
 
   return hslValue
 }
-
-
-
-
-
 
