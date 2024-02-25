@@ -1,7 +1,10 @@
 //import {  } from '/game.js'
+//import { playAudioSuccess, playAudioLose } from '/audio/playAudio.js'
 
 //  // WHAT IS THE DISABLED PROPERTY FOR???
 const results = document.querySelector('[data-results]')
+const attemptScore = document.querySelector('[data-attempts]')
+const successScore = document.querySelector('[data-successes]')
 const button = document.querySelector('[data-button]')
 const colorFormat = document.querySelector('[data-color-format]')
 const format = document.querySelector('[data-format]')
@@ -16,10 +19,13 @@ let hslValue
 let red
 let green
 let blue
+let attempts = 0
+let successes = 0
 
 results.classList.add('hide')
 
 runGame(cells)
+setScore(attempts, successes)
 
 format.addEventListener('click', () => {
   runGame(cells)
@@ -39,11 +45,16 @@ for(let i=0; i<cells.length; i++) {
       results.classList.remove('hide')
       if(selectedCellId == random) {
         results.firstElementChild.innerText = "Correct"
+        successes++
+        //playAudioSuccess()
       } else {
         results.firstElementChild.innerText = "Wrong"
+        //playAudioLose()
       }
     dimCells(cells)  
     cells[random].classList.remove('wrong')
+    attempts++
+    setScore()
     })
   }
 
@@ -70,6 +81,11 @@ function dimCells(cells) {
   })
 }
 
+function setScore() {
+  attemptScore.innerText = `Attempts: ${attempts}`
+  successScore.innerText = `Successes: ${successes}`
+}
+
 function getFormat() {
   const formatButtons = document.querySelectorAll('input[name="format"]')
   for(const formatButton of formatButtons) {
@@ -93,8 +109,6 @@ function getDifficulty() {
 }
 
 function randomizeCells() {
-   
-  console.log(red, green, blue, ' here again')
   cells.forEach((cell) => {
     setCellColors()  
     cell.style.backgroundColor = `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`
@@ -141,7 +155,7 @@ function setCellColors() {
   red = Math.abs(seed - Math.round(Math.random() * span))
   green = Math.abs(seed - Math.round(Math.random() * span))
   blue = Math.abs(seed - Math.round(Math.random() * span))
-  console.log(red, green, blue, ' rgb')
+
   return red, green, blue
 }
 
@@ -158,7 +172,7 @@ function displayColorCode(cells, random) {
   const rgb = temp1.match(/(\d+)/g)  
   if(selectedFormat === 'rgb') {
     colorFormat.innerText = cells[random].style.backgroundColor
-    console.log(colorFormat.innerText)
+
   } else if(selectedFormat === 'hex') {
     colorFormat.innerText = 
     (`#${Math.abs(rgb[0]).toString(16).padStart(2, '0')}${Math.abs(rgb[1]).toString(16).padStart(2, '0')}${Math.abs(rgb[2]).toString(16).padStart(2, '0')}`)
