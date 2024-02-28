@@ -1,7 +1,13 @@
-//import {  } from '/game.js'
-//import { playAudioSuccess, playAudioLose } from '/audio/playAudio.js'
+import { 
+  randomNumber, 
+  randomSix, 
+  dimCells,
+ } from '/utils.js'
+import {  
+  playAudioSuccess, 
+  playAudioLose 
+} from './playAudio.js'
 
-//  // WHAT IS THE DISABLED PROPERTY FOR???
 const results = document.querySelector('[data-results]')
 const attemptScore = document.querySelector('[data-attempts]')
 const successScore = document.querySelector('[data-successes]')
@@ -10,7 +16,8 @@ const colorFormat = document.querySelector('[data-color-format]')
 const format = document.querySelector('[data-format]')
 const difficulty = document.querySelector('[data-difficulty]')
 const colorGrid = document.querySelector('[data-color-grid]')
-export const cells = [...colorGrid.children]
+const cells = [...colorGrid.children]
+
 let selectedFormat
 let selectedDifficulty
 let random
@@ -43,25 +50,34 @@ for(let i=0; i<cells.length; i++) {
     cells[i].addEventListener('click', () => {      
       const selectedCellId = cells[i].id
       results.classList.remove('hide')
+
+      cells.forEach(cell => {
+        cell.setAttribute('disabled', '')
+      })
+
       if(selectedCellId == random) {
         results.firstElementChild.innerText = "Correct"
         successes++
-        //playAudioSuccess()
+        playAudioSuccess()
       } else {
         results.firstElementChild.innerText = "Wrong"
-        //playAudioLose()
+        playAudioLose()
       }
+      
     dimCells(cells)  
     cells[random].classList.remove('wrong')
     attempts++
     setScore()
+
     })
   }
-
 
 button.addEventListener('click', () => {
   runGame(cells)
   results.classList.add('hide')
+  cells.forEach(cell => {
+    cell.removeAttribute('disabled', '')
+  })
 })
 
 function runGame(cells) {
@@ -73,12 +89,6 @@ function runGame(cells) {
   displayColorCode(cells, random)
   secretCell = cells[random].style.backgroundColor
   return secretCell, random
-}
-
-function dimCells(cells) {
-  cells.forEach(cell => {
-    cell.classList.add('wrong')
-  })
 }
 
 function setScore() {
@@ -116,16 +126,6 @@ function randomizeCells() {
   })
 }
 
-function randomNumber(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomSix() {
-  return Math.floor(Math.random() * 6)
-}
-
 function setCellColors() {
   getDifficulty()
   let span
@@ -159,13 +159,6 @@ function setCellColors() {
   return red, green, blue
 }
 
-function getCentralNumber(span) {
-  const offset = (255-span)
-  const newSpan = randomNumber(0,span)
-  const centralNumber = newSpan + offset
-  return centralNumber
-}
-
 function displayColorCode(cells, random) {
   getFormat()
   const temp1 = cells[random].style.backgroundColor
@@ -183,6 +176,7 @@ function displayColorCode(cells, random) {
 }
 
 function rgbToHSL(rgb) {
+  console.log(rgb)
   let r = rgb[0]
   let g = rgb[1]
   let b = rgb[2]
@@ -202,4 +196,6 @@ function rgbToHSL(rgb) {
 
   return hslValue
 }
+
+
 
