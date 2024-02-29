@@ -134,27 +134,27 @@ function setCellColors() {
       span = 255
       break;
     case "medium":
-      span = 220
+      span = 200
       break;
     case "hard":
-      span = 190
+      span = 140
       break;
     case "harder":
-      span = 150
+      span = 90
       break;
     case "insanelyHard":
-      span = 75
+      span = 40
       break;
                       
     default:
       console.log('default');
   }
 
-  const seed = randomNumber(0, 255-span)
-  const offset = Math.round(Math.random() * span)
-  red = Math.abs(seed - Math.round(Math.random() * span))
-  green = Math.abs(seed - Math.round(Math.random() * span))
-  blue = Math.abs(seed - Math.round(Math.random() * span))
+  const seed = randomNumber(Math.ceil(span/2), Math.floor(255-(span/2)))-1
+
+  red = seed + Math.round(((Math.random() * 2) - 1) * (span/2))
+  green = seed + Math.round(((Math.random() * 2) - 1) * (span/2))
+  blue = seed + Math.round(((Math.random() * 2) - 1) * (span/2))
 
   return red, green, blue
 }
