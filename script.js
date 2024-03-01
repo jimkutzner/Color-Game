@@ -166,8 +166,7 @@ function displayColorCode(cells, random) {
   if(selectedFormat === 'rgb') {
     colorFormat.innerText = cells[random].style.backgroundColor
 
-  } else if(selectedFormat === 'hex') {
-    console.log(rgb[0], rgb[1], rgb[2])       
+  } else if(selectedFormat === 'hex') {     
     colorFormat.innerText =  
     (`#${Math.abs(rgb[0]).toString(16).padStart(2, '0')}${Math.abs(rgb[1]).toString(16).padStart(2, '0')}${Math.abs(rgb[2]).toString(16).padStart(2, '0')}`)
   } else {   
@@ -178,7 +177,6 @@ function displayColorCode(cells, random) {
 }
 
 function rgbToHSL(rgb) {
-  console.log(rgb)
   let r = rgb[0]
   let g = rgb[1]
   let b = rgb[2]
