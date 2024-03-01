@@ -1,7 +1,7 @@
 
  export function playAudioSuccess() {
   const audioCtx = new AudioContext();
-  const audioElement = new Audio('./audio/arcade-bonus-alert-success.mp3')
+  const audioElement = new Audio('./audio/success.mp3')
 
   const audioSource = audioCtx.createMediaElementSource(audioElement)
 
@@ -15,7 +15,7 @@
 
  export function playAudioLose() {
   const audioCtx = new AudioContext();
-  const audioElement = new Audio('./audio/retro-arcade-lose-short.mp3')
+  const audioElement = new Audio('./audio/lose.mp3')
 
   const audioSource = audioCtx.createMediaElementSource(audioElement)
 

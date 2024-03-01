@@ -161,15 +161,17 @@ function setCellColors() {
 
 function displayColorCode(cells, random) {
   getFormat()
-  const temp1 = cells[random].style.backgroundColor
-  const rgb = temp1.match(/(\d+)/g)  
+  const backgroundColor = cells[random].style.backgroundColor
+  const rgb = backgroundColor.match(/(\d+)/g)  
   if(selectedFormat === 'rgb') {
     colorFormat.innerText = cells[random].style.backgroundColor
 
   } else if(selectedFormat === 'hex') {
-    colorFormat.innerText = 
+    console.log(rgb[0], rgb[1], rgb[2])       
+    colorFormat.innerText =  
     (`#${Math.abs(rgb[0]).toString(16).padStart(2, '0')}${Math.abs(rgb[1]).toString(16).padStart(2, '0')}${Math.abs(rgb[2]).toString(16).padStart(2, '0')}`)
   } else {   
+
     rgbToHSL(rgb)
     colorFormat.innerText = hslValue      
   }
